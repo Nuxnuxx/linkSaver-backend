@@ -30,7 +30,7 @@ app.post("/new", (req, res) => {
 });
 
 app.post("/delete", async (req, res) => {
-  const deletedObject = await Item.deleteMany({ title: req.body.title });
+  const deletedObject = await Item.deleteOne({ title: req.body.title });
 
   res.json(deletedObject);
 });
