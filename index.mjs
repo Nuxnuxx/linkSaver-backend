@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from 'dotenv'
 import ItemSchema from "./model/Item.mjs";
+import { body, validationResult } from "express-validator";
 dotenv.config()
 const PORT = process.env.PORT || 8000
 
@@ -19,7 +20,15 @@ app.use(cors({ origin: true }));
 
 const Item = mongoose.model("item", ItemSchema);
 
-app.post("/new", (req, res) => {
+app.post("/new",body('title').isString(),body('link').isString(), (req, res) => {
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()){
+    res.status(404)
+    res.json({errors: errors.array()})
+  }
+
+
   const newItem = new Item({
     title: req.body.title,
     link: req.body.link,
